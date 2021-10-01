@@ -1,0 +1,4 @@
+---
+
+- import_tasks: k3s/main.yml
+- import_tasks: dhcpcd.yml

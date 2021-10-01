@@ -1,0 +1,6 @@
+systemd_dir: /etc/systemd/system
+k3s_version: v1.22.2+k3s1
+dhcp_interface: wlan0
+static_ip: "{{ hostvars['raspberrypi.local']['ansible_default_ipv4']['address'] }}/24"
+router_ip: 192.168.2.1
+name_servers: 192.168.2.1 8.8.8.8 fe80::1
