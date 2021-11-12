@@ -1,0 +1,8 @@
+---
+
+- name: Restore dhcpcd.conf backup
+  import_role:
+    name: reset
+    tasks_from: restore
+  vars:
+    file: /etc/dhcpcd.conf

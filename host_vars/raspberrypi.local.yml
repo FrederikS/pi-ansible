@@ -4,3 +4,4 @@ dhcp_interface: wlan0
 static_ip: "{{ hostvars['raspberrypi.local']['ansible_default_ipv4']['address'] }}/24"
 router_ip: 192.168.2.1
 name_servers: 192.168.2.1 8.8.8.8 fe80::1
+terraform_version: 1.0.11

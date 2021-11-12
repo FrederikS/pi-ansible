@@ -4,6 +4,7 @@
   template:
     src: "dhcpcd.conf.j2"
     dest: "/etc/dhcpcd.conf"
+    backup: true
     owner: root
     group: netdev
     mode: 0664

@@ -1,0 +1,26 @@
+---
+
+- name: "Find all backups for {{ file }}"
+  find:
+    recurse: no
+    paths:
+      - "{{ file | dirname }}"
+    patterns:
+      - '{{ file | basename }}\..*~'
+    use_regex: true
+  register: find_backup
+
+- name: Select the latest backup found on disk
+  set_fact:
+    latest_backup: "{{ (find_backup.files | sort(attribute='mtime') | last).path }}"
+
+- name: Show the latest selected backup
+  debug:
+    var: latest_backup
+
+- name: "Restore latest backup of {{ file }}"
+  copy:
+    src: "{{ latest_backup }}"
+    remote_src: true
+    dest: "{{ file }}"
+    mode: preserve
