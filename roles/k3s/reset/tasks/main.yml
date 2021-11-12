@@ -55,3 +55,10 @@
   file:
     path: /usr/local/bin/crictl
     state: absent
+
+# - name: Restore /boot/cmdline.txt backup
+#   import_role:
+#     name: reset
+#     tasks_from: restore
+#   vars:
+#     file: /boot/cmdline.txt

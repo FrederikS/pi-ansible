@@ -30,6 +30,7 @@
     state: absent
   check_mode: yes
   register: tf_autocomplete
+  changed_when: tf_autocomplete.found == 0
 
 - name: Install terraform autocomplete
   command: terraform -install-autocomplete
