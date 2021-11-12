@@ -1,7 +1,9 @@
 ---
 
 - name: Check terraform version
-  command: "terraform version 2>&1 | head -n 1 | grep -q {{ terraform_version }}"
+  shell: set -o pipefail && terraform version 2>&1 | head -n 1 | grep -q {{ terraform_version }}
+  args:
+    executable: /bin/bash
   failed_when: false
   changed_when: false
   register: terraform_versions_match
@@ -20,3 +22,15 @@
     dest: "/usr/local/bin"
     copy: no
   when: terraform_versions_match.rc != 0
+
+- name: Check if autocomplete is installed
+  lineinfile:
+    path: ~/.bashrc
+    line: complete -C /usr/local/bin/terraform terraform
+    state: absent
+  check_mode: yes
+  register: tf_autocomplete
+
+- name: Install terraform autocomplete
+  command: terraform -install-autocomplete
+  when: tf_autocomplete.found == 0
