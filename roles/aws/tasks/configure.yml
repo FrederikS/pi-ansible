@@ -1,0 +1,28 @@
+---
+- name: Load secrets
+  include_vars: defaults/secrets.yml
+
+- name: Create awscli config directory
+  file:
+    path: "{{ awscli_config_directory }}"
+    state: directory
+    recurse: false
+    mode: 0775
+    owner: root
+    group: root
+
+- name: Configure credentials
+  template:
+    src: "credentials.j2"
+    dest: "{{ awscli_config_directory }}/credentials"
+    owner: root
+    group: root
+    mode: 0600
+
+- name: Configure config
+  template:
+    src: "config.j2"
+    dest: "{{ awscli_config_directory }}/config"
+    owner: root
+    group: root
+    mode: 0600

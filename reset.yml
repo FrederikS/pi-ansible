@@ -7,3 +7,4 @@
     - rpi/reset
     - k3s/reset
     - terraform/reset
+    - aws/reset

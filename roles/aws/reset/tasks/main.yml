@@ -1,0 +1,20 @@
+---
+- name: Include aws defaults
+  include_vars: ../defaults/main.yml
+
+- name: Uninstall awscli via pip
+  pip:
+    name: awscli
+    state: absent
+    executable: pip3
+
+- name: Remove aws autocomplete
+  lineinfile:
+    path: ~/.bashrc
+    line: complete -C '/usr/local/bin/aws_completer' aws
+    state: absent
+
+- name: Remove awscli config directory
+  file:
+    path: "{{ awscli_config_directory }}"
+    state: absent

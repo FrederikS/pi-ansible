@@ -1,0 +1,17 @@
+---
+- name: Install pip
+  package:
+    name: python3-pip
+    state: present
+
+- name: Install awscli via pip
+  pip:
+    name: awscli
+    state: present
+    executable: pip3
+
+- name: Enable aws autocomplete
+  lineinfile:
+    path: ~/.bashrc
+    line: complete -C '/usr/local/bin/aws_completer' aws
+    state: present
