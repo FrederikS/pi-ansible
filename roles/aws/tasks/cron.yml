@@ -1,0 +1,48 @@
+---
+- name: Install cron
+  package:
+    name: cron
+    state: present
+
+- name: Make sure a cron service unit is running
+  systemd:
+    state: started
+    name: cron
+    enabled: yes
+
+- name: Enable separate cron logs
+  lineinfile:
+    dest: "{{ rsyslog_config_path }}"
+    regexp: "^#(cron\\.\\*\\s*\\/var\\/log\\/cron\\.log)$"
+    line: "\\1"
+    state: present
+    backrefs: yes
+    backup: yes
+  notify: Reload rsyslog service
+
+- name: Install dnsutils (dig)
+  package:
+    name: dnsutils
+    state: present
+
+- name: Install update-aws-dns script
+  template:
+    src: "update-aws-dns.j2"
+    dest: "{{ local_bin_dir }}/update-aws-dns"
+    owner: root
+    group: root
+    mode: 0700
+
+- name: Define PATH for crontab
+  cron:
+    name: PATH
+    env: yes
+    job: "{{ system_bin_dir }}:{{ local_bin_dir }}"
+
+- name: Enable update-aws-dns cron
+  cron:
+    name: "Update aws dns when public ip changed"
+    state: present
+    job: "update-aws-dns >> {{ system_log_dir }}/update-aws-dns.log 2>&1"
+
+# TODO clean up logs somehow

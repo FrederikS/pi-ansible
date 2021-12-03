@@ -18,3 +18,31 @@
   file:
     path: "{{ awscli_config_directory }}"
     state: absent
+
+- name: Restore rsyslog.conf backup
+  import_role:
+    name: reset
+    tasks_from: restore
+  vars:
+    file: "{{ rsyslog_config_path }}"
+
+- name: Remove update-aws-dns script
+  file:
+    path: "{{ local_bin_dir }}/update-aws-dns"
+    state: absent
+
+- name: Remove PATH crontab entry
+  cron:
+    name: PATH
+    env: yes
+    state: absent
+
+- name: Remove update-aws-dns cron
+  cron:
+    name: "Update aws dns when public ip changed"
+    state: absent
+
+- name: Remove update-aws-dns log
+  file:
+    path: "{{ system_log_dir }}/update-aws-dns.log"
+    state: absent
