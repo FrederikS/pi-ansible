@@ -1,0 +1,30 @@
+---
+
+- name: Download helm linux archive x64
+  get_url:
+    url: https://get.helm.sh/helm-v{{ helm_version }}-linux-amd64.tar.gz
+    checksum: sha256:https://get.helm.sh/helm-v{{ helm_version }}-linux-amd64.tar.gz.sha256sum
+    dest: /tmp
+  register: helm_download
+  when: ansible_facts.architecture == "x86_64"
+
+- name: Download helm linux archive arm64
+  get_url:
+    url: https://get.helm.sh/helm-v{{ helm_version }}-linux-arm64.tar.gz
+    checksum: sha256:https://get.helm.sh/helm-v{{ helm_version }}-linux-arm64.tar.gz.sha256sum
+    dest: /tmp
+  register: helm_download
+  when:
+    - ( ansible_facts.architecture is search("arm") and
+        ansible_facts.userspace_bits == "64" ) or
+      ansible_facts.architecture is search("aarch64")
+
+- name: Download helm linux archive armhf
+  get_url:
+    url: https://get.helm.sh/helm-v{{ helm_version }}-linux-arm.tar.gz
+    checksum: sha256:https://get.helm.sh/helm-v{{ helm_version }}-linux-arm.tar.gz.sha256sum
+    dest: /tmp
+  register: helm_download
+  when:
+    - ansible_facts.architecture is search("arm")
+    - ansible_facts.userspace_bits == "32"

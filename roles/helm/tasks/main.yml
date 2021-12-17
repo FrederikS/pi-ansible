@@ -1,0 +1,26 @@
+---
+- name: Check helm version
+  shell:
+    set -o pipefail && helm version 2>&1 | head -n 1 | grep -q {{ helm_version }}
+  args:
+    executable: /bin/bash
+  failed_when: false
+  changed_when: false
+  register: helm_versions_match
+
+- include_tasks: download.yml
+  when: helm_versions_match.rc != 0
+
+- name: Unarchive helm archive
+  unarchive:
+    src: "{{ helm_download.dest }}"
+    dest: "/usr/local/bin"
+    exclude:
+      - "*/README.md"
+      - "*/LICENSE"
+    extra_opts: [--strip-components=1]
+    copy: no
+    mode: 0751
+    owner: root
+    group: root
+  when: helm_versions_match.rc != 0

@@ -9,3 +9,4 @@
     - k3s/master
     - terraform
     - aws
+    - helm
