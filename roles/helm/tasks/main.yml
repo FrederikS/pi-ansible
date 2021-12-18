@@ -24,3 +24,15 @@
     owner: root
     group: root
   when: helm_versions_match.rc != 0
+
+- name: Enable helm autocomplete
+  lineinfile:
+    path: ~/.bashrc
+    line: source <(helm completion bash)
+    state: present
+
+- name: Export KUBECONFIG
+  lineinfile:
+    path: ~/.profile
+    line: "export KUBECONFIG={{ kube_config_path }}"
+    state: present

@@ -16,3 +16,15 @@
   file:
     path: /usr/local/bin/helm
     state: absent
+
+- name: Remove helm autocomplete
+  lineinfile:
+    path: ~/.bashrc
+    line: source <(helm completion bash)
+    state: absent
+
+- name: Remove KUBECONFIG export
+  lineinfile:
+    path: ~/.profile
+    line: "export KUBECONFIG={{ kube_config_path }}"
+    state: absent
