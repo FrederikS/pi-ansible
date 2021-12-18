@@ -1,5 +1,4 @@
 ---
-
 - name: Setup Raspberry Pi
   hosts: raspberrypi.local
   become: yes
@@ -10,3 +9,4 @@
     - terraform
     - aws
     - helm
+    - tmux

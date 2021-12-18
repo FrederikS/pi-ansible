@@ -1,0 +1,15 @@
+---
+- name: Uninstall tmux
+  package:
+    name: tmux
+    state: absent
+
+- name: Remove .tmux directory
+  file:
+    path: ~/.tmux
+    state: absent
+
+- name: Remove tmux config
+  file:
+    path: "~/.tmux.conf"
+    state: absent

@@ -1,5 +1,4 @@
 ---
-
 - hosts: raspberrypi.local
   gather_facts: no
   become: yes
@@ -9,3 +8,4 @@
     - terraform/reset
     - aws/reset
     - helm/reset
+    - tmux/reset
