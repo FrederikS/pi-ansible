@@ -1,6 +1,6 @@
 ---
 - name: Setup Raspberry Pi
-  hosts: raspberrypi.local
+  hosts: pi.fdk.codes
   become: yes
   roles:
     - rpi

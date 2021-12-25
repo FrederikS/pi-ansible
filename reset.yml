@@ -1,5 +1,5 @@
 ---
-- hosts: raspberrypi.local
+- hosts: pi.fdk.codes
   gather_facts: no
   become: yes
   roles:
