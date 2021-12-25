@@ -39,3 +39,8 @@
     path: ~/.bashrc
     line: complete -C '/usr/local/bin/aws_completer' aws
     state: absent
+
+- name: Remove kube config
+  file:
+    path: "~/.kube/config"
+    state: absent
