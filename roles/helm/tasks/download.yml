@@ -5,7 +5,7 @@
     url: https://get.helm.sh/helm-v{{ helm_version }}-linux-amd64.tar.gz
     checksum: sha256:https://get.helm.sh/helm-v{{ helm_version }}-linux-amd64.tar.gz.sha256sum
     dest: /tmp
-  register: helm_download
+  register: helm_download_1
   when: ansible_facts.architecture == "x86_64"
 
 - name: Download helm linux archive arm64
@@ -13,7 +13,7 @@
     url: https://get.helm.sh/helm-v{{ helm_version }}-linux-arm64.tar.gz
     checksum: sha256:https://get.helm.sh/helm-v{{ helm_version }}-linux-arm64.tar.gz.sha256sum
     dest: /tmp
-  register: helm_download
+  register: helm_download_2
   when:
     - ( ansible_facts.architecture is search("arm") and
         ansible_facts.userspace_bits == "64" ) or
@@ -24,7 +24,22 @@
     url: https://get.helm.sh/helm-v{{ helm_version }}-linux-arm.tar.gz
     checksum: sha256:https://get.helm.sh/helm-v{{ helm_version }}-linux-arm.tar.gz.sha256sum
     dest: /tmp
-  register: helm_download
+  register: helm_download_3
   when:
     - ansible_facts.architecture is search("arm")
     - ansible_facts.userspace_bits == "32"
+
+- name: Set helm_download_dest 1
+  set_fact:
+    helm_download_dest: "{{ helm_download_1.dest }}"
+  when: helm_download_1 is not skipped
+
+- name: Set helm_download_dest 2
+  set_fact:
+    helm_download_dest: "{{ helm_download_2.dest }}"
+  when: helm_download_2 is not skipped
+
+- name: Set helm_download_dest 3
+  set_fact:
+    helm_download_dest: "{{ helm_download_3.dest }}"
+  when: helm_download_3 is not skipped

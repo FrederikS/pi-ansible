@@ -11,6 +11,6 @@ aws_hosted_zone_id: Z02131432BPRD17CWC45P
 system_log_dir: /var/log
 system_bin_dir: /usr/bin
 local_bin_dir: /usr/local/bin
-extra_server_args: --disable traefik --disable servicelb
+extra_server_args: --disable traefik --disable servicelb --write-kubeconfig-mode 640
 helm_version: 3.7.2
 kube_config_path: /etc/rancher/k3s/k3s.yaml

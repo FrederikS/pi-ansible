@@ -1,0 +1,41 @@
+---
+- name: Uninstall tmux
+  become: yes
+  become_user: root
+  package:
+    name: tmux
+    state: absent
+
+- name: Remove .tmux directory
+  file:
+    path: ~/.tmux
+    state: absent
+
+- name: Remove tmux config
+  file:
+    path: "~/.tmux.conf"
+    state: absent
+
+- name: Remove terraform autocomplete
+  lineinfile:
+    path: ~/.bashrc
+    line: complete -C /usr/local/bin/terraform terraform
+    state: absent
+
+- name: Remove helm autocomplete
+  lineinfile:
+    path: ~/.bashrc
+    line: source <(helm completion bash)
+    state: absent
+
+- name: Remove KUBECONFIG export
+  lineinfile:
+    path: ~/.profile
+    line: "export KUBECONFIG={{ kube_config_path }}"
+    state: absent
+
+- name: Remove aws autocomplete
+  lineinfile:
+    path: ~/.bashrc
+    line: complete -C '/usr/local/bin/aws_completer' aws
+    state: absent

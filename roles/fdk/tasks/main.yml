@@ -1,0 +1,53 @@
+---
+- name: Check if autocomplete is installed
+  lineinfile:
+    path: ~/.bashrc
+    line: complete -C /usr/local/bin/terraform terraform
+    state: absent
+  check_mode: yes
+  register: tf_autocomplete
+  changed_when: tf_autocomplete.found == 0
+
+- name: Install terraform autocomplete
+  command: terraform -install-autocomplete
+  when: tf_autocomplete.found == 0
+
+- name: Install tmux
+  become: yes
+  become_user: root
+  package:
+    name: tmux
+    state: present
+
+- name: Install tpm
+  git:
+    repo: https://github.com/tmux-plugins/tpm
+    dest: ~/.tmux/plugins/tpm
+    update: no
+    version: master
+
+- name: Add tmux config
+  template:
+    src: "tmux.conf.j2"
+    dest: "~/.tmux.conf"
+    owner: fdk
+    group: fdk
+    mode: 0644
+
+- name: Enable helm autocomplete
+  lineinfile:
+    path: ~/.bashrc
+    line: source <(helm completion bash)
+    state: present
+
+- name: Export KUBECONFIG
+  lineinfile:
+    path: ~/.profile
+    line: "export KUBECONFIG={{ kube_config_path }}"
+    state: present
+
+- name: Enable aws autocomplete
+  lineinfile:
+    path: ~/.bashrc
+    line: complete -C '/usr/local/bin/aws_completer' aws
+    state: present

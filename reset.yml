@@ -8,4 +8,6 @@
     - terraform/reset
     - aws/reset
     - helm/reset
-    - tmux/reset
+    - role: fdk/reset
+      become: yes
+      become_user: fdk

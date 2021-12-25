@@ -55,3 +55,14 @@
     src: /usr/local/bin/k3s
     dest: /usr/local/bin/crictl
     state: link
+
+- name: Check that kubectl autocompletion exists
+  stat:
+    path: /etc/bash_completion.d/kubectl
+  register: kubectl_autocompletion_stat_result
+
+- name: Enable kubectl autocomplete
+  shell: set -o pipefail && kubectl completion bash > /etc/bash_completion.d/kubectl
+  args:
+    executable: /bin/bash
+  when: not kubectl_autocompletion_stat_result.stat.exists

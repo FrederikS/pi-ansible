@@ -13,7 +13,7 @@
 
 - name: Unarchive helm archive
   unarchive:
-    src: "{{ helm_download.dest }}"
+    src: "{{ helm_download_dest }}"
     dest: "/usr/local/bin"
     exclude:
       - "*/README.md"

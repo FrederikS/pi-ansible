@@ -9,4 +9,6 @@
     - terraform
     - aws
     - helm
-    - tmux
+    - role: fdk
+      become: yes
+      become_user: fdk
