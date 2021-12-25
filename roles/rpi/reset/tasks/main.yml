@@ -6,3 +6,9 @@
     tasks_from: restore
   vars:
     file: /etc/dhcpcd.conf
+
+- name: Remove sshd fix
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    line: IPQoS 0x00
+    state: absent
