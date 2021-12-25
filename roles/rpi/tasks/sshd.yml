@@ -1,0 +1,7 @@
+---
+- name: Fix sshd
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    line: IPQoS 0x00
+    state: present
+  notify: Reload ssdh service

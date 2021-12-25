@@ -1,5 +1,4 @@
 ---
-
 - name: Restore dhcpcd.conf backup
   import_role:
     name: reset
@@ -11,4 +10,15 @@
   lineinfile:
     path: /etc/ssh/sshd_config
     line: IPQoS 0x00
+    state: absent
+
+- name: Stop blanking service
+  systemd:
+    name: enable-console-blanking.service
+    state: stopped
+    enabled: no
+
+- name: Remove blanking service
+  file:
+    path: /etc/systemd/system/enable-console-blanking.service
     state: absent
