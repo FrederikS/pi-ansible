@@ -22,3 +22,13 @@
   file:
     path: /etc/systemd/system/enable-console-blanking.service
     state: absent
+
+- name: Remove fdk user
+  user:
+    name: fdk
+    state: absent
+
+- name: Remove fdk home directory
+  file:
+    path: /home/fdk
+    state: absent
