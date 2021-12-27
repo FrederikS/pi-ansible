@@ -44,3 +44,5 @@ Besides already having a hosted DNS zone under AWS Route 53, you need to set up 
 - <https://superuser.com/questions/1180158/how-to-resolve-dynamic-dns-domain-to-internal-ip-without-nat-loopback-or-dns-cha>
 - <https://fabianlee.org/2021/09/16/kubernetes-k3s-with-multiple-istio-ingress-gateways/>
 - <https://nerdiy.de/raspberrypi-ssh-reagiert-nicht-oder-ist-sehr-langsam-problem-beheben/>
+- <https://github.com/DougieLawson/backlight_dimmer>
+- <https://askubuntu.com/questions/237963/how-do-i-rotate-my-display-when-not-using-an-x-server>

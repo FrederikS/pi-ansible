@@ -1,0 +1,10 @@
+[Unit]
+Description=Enable backlight timeout after period
+
+[Service]
+Type=forking
+ExecStartPre=/bin/sh -c 'echo 255 > /sys/class/backlight/rpi_backlight/brightness'
+ExecStart=/usr/local/bin/run-timeout.sh
+
+[Install]
+WantedBy=multi-user.target

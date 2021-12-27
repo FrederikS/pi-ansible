@@ -1,5 +1,4 @@
 ---
 - import_tasks: user.yml
-- import_tasks: blank.yml
 - import_tasks: sshd.yml
 - import_tasks: dhcpcd.yml

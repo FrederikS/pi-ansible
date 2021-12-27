@@ -4,6 +4,6 @@
     name: fdk
     password: "{{ 'fdk' | password_hash('sha512') }}"
     shell: /bin/bash
-    groups: admin,root
+    groups: admin,root,adm
     update_password: on_create
   notify: Force fdk to change password

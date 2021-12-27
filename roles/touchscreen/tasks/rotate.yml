@@ -1,0 +1,11 @@
+---
+
+- name: set lcd_rotate boot option
+  lineinfile:
+    path: /boot/firmware/cmdline.txt
+    backrefs: yes
+    regexp: '^((?!.*\bfbcon=rotate:2\b).*)$'
+    line: '\1 fbcon=rotate:2'
+  notify: reboot
+  when:
+    - ansible_distribution | default("") == "Ubuntu"

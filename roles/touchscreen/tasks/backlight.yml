@@ -1,0 +1,52 @@
+---
+- name: Clone backlight_dimmer util
+  git:
+    repo: https://github.com/DougieLawson/backlight_dimmer
+    dest: /tmp/backlight_dimmer
+    update: no
+    version: master
+
+- name: Make backlight_dimmer
+  make:
+    chdir: /tmp/backlight_dimmer
+
+- name: Copy backlight_dimmer timeout
+  copy:
+    src: /tmp/backlight_dimmer/timeout
+    dest: "{{ local_bin_dir }}"
+    remote_src: yes
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Copy backlight_dimmer lsinput
+  copy:
+    src: /tmp/backlight_dimmer/lsinput
+    dest: "{{ local_bin_dir }}"
+    remote_src: yes
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Copy backlight_dimmer run-timeout.sh
+  copy:
+    src: /tmp/backlight_dimmer/run-timeout.sh
+    dest: "{{ local_bin_dir }}"
+    remote_src: yes
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Add timeout service
+  template:
+    src: "backlight-timeout.service.j2"
+    dest: "/etc/systemd/system/backlight-timeout.service"
+    owner: root
+    group: root
+    mode: 0664
+
+- name: Enable timeout service
+  systemd:
+    name: backlight-timeout.service
+    state: started
+    enabled: yes

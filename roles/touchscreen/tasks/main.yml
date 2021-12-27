@@ -1,0 +1,4 @@
+---
+
+- import_tasks: rotate.yml
+- import_tasks: backlight.yml

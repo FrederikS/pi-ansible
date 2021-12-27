@@ -1,0 +1,25 @@
+---
+- name: Remove backlight_dimmer dir
+  file:
+    path: "/tmp/backlight_dimmer"
+    state: absent
+
+- name: Remove backlight_dimmer bin files
+  file:
+    path: "{{ local_bin_dir }}/{{ item }}"
+    state: absent
+  with_items:
+    - timeout
+    - lsinput
+    - run-timeout.sh
+
+- name: Stop blanking service
+  systemd:
+    name: backlight-timeout.service
+    state: stopped
+    enabled: no
+
+- name: Remove blanking service
+  file:
+    path: /etc/systemd/system/backlight-timeout.service
+    state: absent

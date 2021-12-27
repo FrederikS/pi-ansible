@@ -4,6 +4,7 @@
   become: yes
   roles:
     - rpi/reset
+    - touchscreen/reset
     - k3s/reset
     - terraform/reset
     - aws/reset
