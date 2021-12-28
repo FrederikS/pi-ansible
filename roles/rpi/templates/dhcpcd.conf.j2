@@ -45,7 +45,7 @@ interface {{ dhcp_interface }}
 static ip_address={{ static_ip }}
 #static ip6_address=fd51:42f8:caae:d92e::ff/64
 static routers={{ router_ip }}
-static domain_name_servers={{ name_servers }}
+static domain_name_servers={{ name_servers | join(' ') }}
 
 # It is possible to fall back to a static IP if DHCP fails:
 # define static profile

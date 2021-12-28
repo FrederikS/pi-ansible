@@ -3,7 +3,10 @@ k3s_version: v1.22.2+k3s1
 dhcp_interface: wlan0
 static_ip: "{{ hostvars['pi.fdk.codes']['ansible_default_ipv4']['address'] }}/24"
 router_ip: 192.168.2.1
-name_servers: 192.168.2.1 8.8.8.8 fe80::1
+name_servers:
+ - 192.168.2.1
+ - 8.8.8.8
+ - fe80::1
 terraform_version: 1.0.11
 rsyslog_config_path: /etc/rsyslog.conf
 aws_public_domain: pi.fdk.codes

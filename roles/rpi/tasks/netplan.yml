@@ -1,0 +1,14 @@
+---
+
+- name: Load netplan secrets
+  include_vars: defaults/secrets.yml
+
+- name: Add netplan config
+  template:
+    src: "50-cloud-init.yaml.j2"
+    dest: "/etc/netplan/50-cloud-init.yaml"
+    backup: yes
+    owner: root
+    group: root
+    mode: 0644
+  notify: Apply netplan

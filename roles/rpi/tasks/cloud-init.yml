@@ -1,0 +1,9 @@
+---
+
+- name: Disable cloud-init
+  file:
+    path: /etc/cloud/cloud-init.disabled
+    owner: root
+    group: root
+    mode: 0644
+    state: touch
