@@ -4,13 +4,13 @@
     paths: /tmp
     recurse: no
     patterns: "helm-*.tar.gz"
-  register: tf_archives
+  register: helm_archives
 
 - name: Remove helm archives
   file:
     path: "{{ item.path }}"
     state: absent
-  with_items: "{{ tf_archives.files }}"
+  with_items: "{{ helm_archives.files }}"
 
 - name: Uninstall helm
   file:
