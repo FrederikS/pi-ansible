@@ -1,0 +1,24 @@
+---
+- name: Find istio archives
+  find:
+    paths: /tmp
+    recurse: no
+    patterns: "istioctl-*.tar.gz"
+  register: istio_archives
+
+- name: Remove istio archives
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  with_items: "{{ istio_archives.files }}"
+
+- name: Uninstall istio
+  file:
+    path: /usr/local/bin/istioctl
+    state: absent
+
+- name: Remove istio autocomplete
+  lineinfile:
+    path: ~/.bashrc
+    line: source <(istioctl completion bash)
+    state: absent

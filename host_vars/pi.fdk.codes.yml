@@ -17,3 +17,4 @@ local_bin_dir: /usr/local/bin
 extra_server_args: --disable traefik --disable servicelb
 helm_version: 3.7.2
 kube_config_path: /etc/rancher/k3s/k3s.yaml
+istio_version: 1.12.1

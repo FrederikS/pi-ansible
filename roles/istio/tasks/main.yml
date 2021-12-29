@@ -1,0 +1,28 @@
+---
+- name: Check istio version
+  shell:
+    set -o pipefail && istioctl version 2>&1 | grep -q {{ istio_version }}
+  args:
+    executable: /bin/bash
+  failed_when: false
+  changed_when: false
+  register: istio_versions_match
+
+- include_tasks: download.yml
+  when: istio_versions_match.rc != 0
+
+- name: Unarchive istio archive
+  unarchive:
+    src: "{{ istio_download_dest }}"
+    dest: "/usr/local/bin"
+    copy: no
+    mode: 0751
+    owner: root
+    group: root
+  when: istio_versions_match.rc != 0
+
+- name: Enable istio autocomplete
+  lineinfile:
+    path: ~/.bashrc
+    line: source <(istioctl completion bash)
+    state: present

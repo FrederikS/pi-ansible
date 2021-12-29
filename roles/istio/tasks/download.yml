@@ -1,0 +1,45 @@
+---
+
+- name: Download istio linux archive x64
+  get_url:
+    url: https://github.com/istio/istio/releases/download/{{ istio_version }}/istioctl-{{ istio_version }}-linux-amd64.tar.gz
+    checksum: sha256:https://github.com/istio/istio/releases/download/{{ istio_version }}/istioctl-{{ istio_version }}-linux-amd64.tar.gz.sha256
+    dest: /tmp
+  register: istio_download_1
+  when: ansible_facts.architecture == "x86_64"
+
+- name: Download istio linux archive arm64
+  get_url:
+    url: https://github.com/istio/istio/releases/download/{{ istio_version }}/istioctl-{{ istio_version }}-linux-arm64.tar.gz
+    checksum: sha256:https://github.com/istio/istio/releases/download/{{ istio_version }}/istioctl-{{ istio_version }}-linux-arm64.tar.gz.sha256
+    dest: /tmp
+  register: istio_download_2
+  when:
+    - ( ansible_facts.architecture is search("arm") and
+        ansible_facts.userspace_bits == "64" ) or
+      ansible_facts.architecture is search("aarch64")
+
+- name: Download istio linux archive armhf
+  get_url:
+    url: https://github.com/istio/istio/releases/download/{{ istio_version }}/istioctl-{{ istio_version }}-linux-armv7.tar.gz
+    checksum: sha256:https://github.com/istio/istio/releases/download/{{ istio_version }}/istioctl-{{ istio_version }}-linux-armv7.tar.gz.sha256
+    dest: /tmp
+  register: istio_download_3
+  when:
+    - ansible_facts.architecture is search("arm")
+    - ansible_facts.userspace_bits == "32"
+
+- name: Set istio_download_dest 1
+  set_fact:
+    istio_download_dest: "{{ istio_download_1.dest }}"
+  when: istio_download_1 is not skipped
+
+- name: Set istio_download_dest 2
+  set_fact:
+    istio_download_dest: "{{ istio_download_2.dest }}"
+  when: istio_download_2 is not skipped
+
+- name: Set istio_download_dest 3
+  set_fact:
+    istio_download_dest: "{{ istio_download_3.dest }}"
+  when: istio_download_3 is not skipped
