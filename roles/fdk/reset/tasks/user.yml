@@ -1,0 +1,10 @@
+---
+- name: Remove fdk user
+  user:
+    name: fdk
+    state: absent
+
+- name: Remove fdk home directory
+  file:
+    path: /home/fdk
+    state: absent

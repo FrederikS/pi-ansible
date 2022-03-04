@@ -1,0 +1,9 @@
+---
+- name: Apply netplan
+  shell: |
+    netplan generate
+    netplan apply
+  notify: reboot
+
+- name: reboot
+  reboot:

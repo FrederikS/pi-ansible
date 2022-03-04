@@ -42,7 +42,7 @@ slaac private
 
 # Example static IP configuration:
 interface {{ dhcp_interface }}
-static ip_address={{ static_ip }}
+static ip_address={{ ansible_default_ipv4.address }}
 #static ip6_address=fd51:42f8:caae:d92e::ff/64
 static routers={{ router_ip }}
 static domain_name_servers={{ name_servers | join(' ') }}

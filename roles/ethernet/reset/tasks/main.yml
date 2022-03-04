@@ -5,27 +5,13 @@
     tasks_from: restore
   vars:
     file: /etc/dhcpcd.conf
-
-- name: Remove sshd fix
-  lineinfile:
-    path: /etc/ssh/sshd_config
-    line: IPQoS 0x00
-    state: absent
-
-- name: Remove fdk user
-  user:
-    name: fdk
-    state: absent
-
-- name: Remove fdk home directory
-  file:
-    path: /home/fdk
-    state: absent
+  when: detected_distribution | default("") == "Raspbian"
 
 - name: Enable cloud-init
   file:
     path: /etc/cloud/cloud-init.disabled
     state: absent
+  when: ansible_distribution | default("") == "Ubuntu"
 
 - name: Restore netplan
   import_role:
@@ -34,3 +20,4 @@
   vars:
     file: /etc/netplan/50-cloud-init.yaml
   notify: Apply netplan
+  when: ansible_distribution | default("") == "Ubuntu"

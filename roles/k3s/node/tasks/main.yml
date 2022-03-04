@@ -1,0 +1,17 @@
+---
+- name: Check k3s version
+  shell: set -o pipefail && k3s --version 2>&1 | head -n 1 | grep -q {{ k3s_version }}
+  args:
+    executable: /bin/bash
+  failed_when: false
+  changed_when: false
+  register: k3s_versions_match
+
+- name: collect facts about system services
+  service_facts:
+
+- import_tasks: setup.yml
+  when:
+    (ansible_facts['services']['k3s.service'] is not defined) or
+    (ansible_facts['services']['k3s.service']['state'] == 'stopped') or
+    (k3s_versions_match.rc != 0)

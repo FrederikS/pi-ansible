@@ -1,14 +1,5 @@
 ---
-- hosts: pi.fdk.codes
-  gather_facts: no
+- hosts: master
   become: yes
   roles:
-    - rpi/reset
-    - touchscreen/reset
-    - k3s/reset
-    - terraform/reset
-    - aws/reset
-    - helm/reset
     - role: fdk/reset
-      become: yes
-      become_user: fdk

@@ -1,0 +1,15 @@
+---
+- name: Enable cloud-init
+  file:
+    path: /etc/cloud/cloud-init.disabled
+    state: absent
+  when: ansible_distribution | default("") == "Ubuntu"
+
+- name: Restore netplan
+  import_role:
+    name: reset
+    tasks_from: restore
+  vars:
+    file: /etc/netplan/50-cloud-init.yaml
+  notify: Apply netplan
+  when: ansible_distribution | default("") == "Ubuntu"

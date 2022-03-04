@@ -6,21 +6,10 @@
 network:
     ethernets:
         eth0:
-            dhcp4: true
-            optional: true
-    wifis:
-        {{ dhcp_interface }}:
             addresses:
-                - {{ static_ip }}
+                - {{ ansible_default_ipv4.address }}
+            gateway4: {{ router_ip }}
             nameservers:
                 addresses: [{{ name_servers | join(', ') }}]
-            routes:
-                - to: default
-                  via: {{ router_ip }}
             optional: true
-            access-points:
-                "{{ wlan_name }}":
-                    auth:
-                        key-management: psk
-                        password: {{ wlan_psk }}
     version: 2

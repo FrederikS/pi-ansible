@@ -1,0 +1,3 @@
+---
+- name: Force fdk to change password
+  command: chage -d 0 fdk

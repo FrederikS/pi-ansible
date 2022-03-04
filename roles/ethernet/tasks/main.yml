@@ -1,0 +1,8 @@
+---
+- import_tasks: dhcpcd.yml
+  when: detected_distribution | default("") == "Raspbian"
+- include_tasks: "{{ item }}"
+  with_items:
+    - cloud-init.yml
+    - netplan.yml
+  when: ansible_distribution | default("") == "Ubuntu"

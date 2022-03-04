@@ -1,0 +1,6 @@
+---
+- name: Remove sshd fix
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    line: IPQoS 0x00
+    state: absent

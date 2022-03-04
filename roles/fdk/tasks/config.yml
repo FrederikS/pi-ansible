@@ -1,0 +1,105 @@
+---
+- name: Check if autocomplete is installed
+  lineinfile:
+    path: ~/.bashrc
+    line: complete -C /usr/local/bin/terraform terraform
+    state: absent
+  check_mode: yes
+  register: tf_autocomplete
+  changed_when: false
+  failed_when: false
+
+- name: Check if terraform installed
+  shell: command -v terraform > /dev/null 2>&1
+  register: is_terraform_installed
+  ignore_errors: yes
+  changed_when: false
+  failed_when: false
+
+- name: Install terraform autocomplete
+  command: terraform -install-autocomplete
+  when:
+    - is_terraform_installed.rc == 0
+    - tf_autocomplete.found == 0
+
+- name: Install tpm
+  git:
+    repo: https://github.com/tmux-plugins/tpm
+    dest: ~/.tmux/plugins/tpm
+    update: no
+    version: master
+
+- name: Add tmux config
+  template:
+    src: "tmux.conf.j2"
+    dest: "~/.tmux.conf"
+    owner: fdk
+    group: fdk
+    mode: 0644
+
+- name: Check if helm installed
+  shell: command -v helm > /dev/null 2>&1
+  register: is_helm_installed
+  ignore_errors: yes
+  changed_when: false
+  failed_when: false
+
+- name: Enable helm autocomplete
+  lineinfile:
+    path: ~/.bashrc
+    line: source <(helm completion bash)
+    state: present
+  when: is_helm_installed.rc == 0
+
+- name: Check if aws installed
+  shell: command -v aws > /dev/null 2>&1
+  register: is_aws_installed
+  ignore_errors: yes
+  changed_when: false
+  failed_when: false
+
+- name: Enable aws autocomplete
+  lineinfile:
+    path: ~/.bashrc
+    line: complete -C '/usr/local/bin/aws_completer' aws
+    state: present
+  when: is_aws_installed.rc == 0
+
+- name: Ensures .kube dir exists
+  file:
+    path: ~/.kube
+    state: directory
+    owner: fdk
+    group: fdk
+    mode: 0755
+
+- name: Copy kube config
+  become: yes
+  become_user: root
+  copy:
+    src: "{{ kube_config_path }}"
+    dest: "/home/fdk/.kube/config"
+    remote_src: yes
+    owner: fdk
+    group: fdk
+    mode: 0600
+
+- name: Export KUBECONFIG
+  lineinfile:
+    path: ~/.profile
+    line: "export KUBECONFIG=~/.kube/config"
+    state: present
+
+- name: Check if istioctl installed
+  shell: command -v istioctl > /dev/null 2>&1
+  register: is_istioctl_installed
+  ignore_errors: yes
+  changed_when: false
+  failed_when: false
+
+- name: Enable istio autocomplete
+  lineinfile:
+    path: ~/.bashrc
+    line: source <(istioctl completion bash)
+    state: present
+  when: is_istioctl_installed.rc == 0
