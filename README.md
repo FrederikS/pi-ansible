@@ -4,36 +4,37 @@
 
 ### Setup aws user to use for aws cli
 
-Besides already having a hosted DNS zone under AWS Route 53, you need to set up the following in the AWS `IAM console`:
+Besides already having a hosted DNS zone under AWS Route 53, you need to set up
+the following in the AWS `IAM console`:
 
 - Create a user.
 - Write down the "Access Key ID" and "Secret Access Key" credentials.
-- Click on the newly created user to edit its properties. Click `Inline Policies` to create one. Use the Policy Generator:
+- Click on the newly created user to edit its properties. Click
+  `Inline Policies` to create one. Use the Policy Generator:
   - **Effect**: Allow
   - **AWS Service**: Amazon Route 53
   - **Actions**: select only "ChangeResourceRecordSets"
-  - **Amazon Resource Name (ARN)**: ```arn:aws:route53:::hostedzone/%ID%```
-    - You can get the [ID](http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/UsingWithIAM.html) of your hosted zone from the list of the "Hosted zones" in your AWS Route 53 service.
-    - Example: ```arn:aws:route53:::hostedzone/Z148QEXAMPLE8V```
+  - **Amazon Resource Name (ARN)**: `arn:aws:route53:::hostedzone/%ID%`
+    - You can get the
+      [ID](http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/UsingWithIAM.html)
+      of your hosted zone from the list of the "Hosted zones" in your AWS Route
+      53 service.
+    - Example: `arn:aws:route53:::hostedzone/Z148QEXAMPLE8V`
 - Click Next. The final Policy Document would look something like:
 
-    ```json
-    {
-        "Version": "2012-10-17",
-        "Statement": [
-            {
-                "Sid": "Stmt1456599587000",
-                "Effect": "Allow",
-                "Action": [
-                    "route53:ChangeResourceRecordSets"
-                ],
-                "Resource": [
-                    "arn:aws:route53:::hostedzone/Z148QEXAMPLE8V"
-                ]
-            }
-        ]
-    }
-    ```
+  ```json
+  {
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Sid": "Stmt1456599587000",
+        "Effect": "Allow",
+        "Action": ["route53:ChangeResourceRecordSets"],
+        "Resource": ["arn:aws:route53:::hostedzone/Z148QEXAMPLE8V"]
+      }
+    ]
+  }
+  ```
 
 - Click "Apply Policy".
 
