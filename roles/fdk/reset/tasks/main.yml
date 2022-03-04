@@ -44,3 +44,9 @@
   file:
     path: "~/.kube/config"
     state: absent
+
+- name: Remove istio autocomplete
+  lineinfile:
+    path: ~/.bashrc
+    line: source <(istioctl completion bash)
+    state: absent

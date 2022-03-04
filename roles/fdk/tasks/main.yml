@@ -70,3 +70,9 @@
     path: ~/.profile
     line: "export KUBECONFIG=~/.kube/config"
     state: present
+
+- name: Enable istio autocomplete
+  lineinfile:
+    path: ~/.bashrc
+    line: source <(istioctl completion bash)
+    state: present
