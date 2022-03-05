@@ -17,7 +17,8 @@
 - hosts: node
   become: yes
   roles:
-    - role: wifi
+    - role: ethernet
     - role: touchscreen
     - role: sshfix
     - role: k3s/node
+    - role: fdk

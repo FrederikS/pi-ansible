@@ -72,6 +72,7 @@
     owner: fdk
     group: fdk
     mode: 0755
+  when: "'master' in group_names"
 
 - name: Copy kube config
   become: yes
@@ -83,12 +84,14 @@
     owner: fdk
     group: fdk
     mode: 0600
+  when: "'master' in group_names"
 
 - name: Export KUBECONFIG
   lineinfile:
     path: ~/.profile
     line: "export KUBECONFIG=~/.kube/config"
     state: present
+  when: "'master' in group_names"
 
 - name: Check if istioctl installed
   shell: command -v istioctl > /dev/null 2>&1

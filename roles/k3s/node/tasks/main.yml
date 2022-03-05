@@ -12,6 +12,6 @@
 
 - import_tasks: setup.yml
   when:
-    (ansible_facts['services']['k3s.service'] is not defined) or
-    (ansible_facts['services']['k3s.service']['state'] == 'stopped') or
+    (ansible_facts['services']['k3s-node.service'] is not defined) or
+    (ansible_facts['services']['k3s-node.service']['state'] == 'stopped') or
     (k3s_versions_match.rc != 0)

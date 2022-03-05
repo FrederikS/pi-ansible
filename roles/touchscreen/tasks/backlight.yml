@@ -1,4 +1,9 @@
 ---
+- name: Install build-essential
+  apt:
+    pkg: build-essential
+    state: present
+
 - name: Clone backlight_dimmer util
   git:
     repo: https://github.com/DougieLawson/backlight_dimmer

@@ -15,3 +15,12 @@
     (ansible_facts['services']['k3s.service'] is not defined) or
     (ansible_facts['services']['k3s.service']['state'] == 'stopped') or
     (k3s_versions_match.rc != 0)
+
+- name: Read node-token from master
+  slurp:
+    src: /var/lib/rancher/k3s/server/node-token
+  register: node_token
+
+- name: Store Master node-token
+  set_fact:
+    token: "{{ node_token.content | b64decode | regex_replace('\n', '') }}"

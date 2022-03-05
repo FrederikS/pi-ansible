@@ -3,3 +3,8 @@
   become: yes
   roles:
     - role: fdk/reset
+
+- hosts: node
+  become: yes
+  roles:
+    - role: k3s/reset
