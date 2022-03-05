@@ -3,3 +3,4 @@
 - import_tasks: packages.yml
 - import_tasks: config.yml
   become_user: fdk
+  notify: Force fdk to change password
