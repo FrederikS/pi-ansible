@@ -4,12 +4,11 @@
 # /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg with the following:
 # network: {config: disabled}
 network:
-    ethernets:
-        eth0:
-            addresses:
-                - {{ ansible_default_ipv4.address }}
-            gateway4: {{ router_ip }}
-            nameservers:
-                addresses: [{{ name_servers | join(', ') }}]
-            optional: true
-    version: 2
+  ethernets:
+    eth0:
+      addresses:
+        - {{ ansible_default_ipv4.address }}/24
+      gateway4: {{ router_ip }}
+      nameservers:
+        addresses: [{{ name_servers | join(', ') }}]
+  version: 2
