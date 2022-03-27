@@ -1,0 +1,20 @@
+---
+- name: Load secrets
+  include_vars: defaults/secrets.yml
+
+- name: Create k3s config directory
+  file:
+    path: "{{ k3s_config_directory }}"
+    state: directory
+    recurse: false
+    mode: 0755
+    owner: root
+    group: root
+
+- name: Create K3s registries.yaml config
+  template:
+    src: "registries.yaml.j2"
+    dest: "{{ k3s_config_directory }}/registries.yaml"
+    owner: root
+    group: root
+    mode: 0600
