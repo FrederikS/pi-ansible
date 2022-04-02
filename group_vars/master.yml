@@ -5,3 +5,4 @@ aws_hosted_zone_id: Z02131432BPRD17CWC45P
 extra_server_args: --disable traefik
 helm_version: 3.8.0
 kube_config_path: /etc/rancher/k3s/k3s.yaml
+operatorsdk_version: v1.18.1

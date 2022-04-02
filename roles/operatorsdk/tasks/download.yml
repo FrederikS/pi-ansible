@@ -1,0 +1,72 @@
+---
+
+- name: Create temp download directory
+  ansible.builtin.file:
+    path: /tmp/operator-sdk
+    state: directory
+    recurse: false
+    mode: 0775
+    owner: root
+    group: root
+  register: download_directory
+
+- name: Download operatorsdk linux archive x64
+  ansible.builtin.get_url:
+    url: https://github.com/operator-framework/operator-sdk/releases/download/{{ operatorsdk_version }}/operator-sdk_linux_amd64
+    dest: "{{ download_directory.path }}"
+    mode: 0755
+  register: operatorsdk_dowload_1
+  when: ansible_facts.architecture == "x86_64"
+
+- name: Download operatorsdk linux archive arm64
+  ansible.builtin.get_url:
+    url: https://github.com/operator-framework/operator-sdk/releases/download/{{ operatorsdk_version }}/operator-sdk_linux_arm64
+    dest: "{{ download_directory.path }}"
+    mode: 0755
+  register: operatorsdk_dowload_2
+  when:
+    - ( ansible_facts.architecture is search("arm") and
+        ansible_facts.userspace_bits == "64" ) or
+      ansible_facts.architecture is search("aarch64")
+
+- name: Get checksums
+  ansible.builtin.get_url:
+    url: https://github.com/operator-framework/operator-sdk/releases/download/{{ operatorsdk_version }}/{{ item }}
+    dest: "{{ download_directory.path }}"
+    mode: 0644
+  loop:
+    - checksums.txt
+    - checksums.txt.asc
+
+- name: Install gpg
+  ansible.builtin.package:
+    name: gpg
+    state: present
+
+- name: Verify signature
+  ansible.builtin.shell: |
+      gpg --keyserver keyserver.ubuntu.com --recv-keys 052996E2A20B5C7E
+      gpg -u "Operator SDK (release) <cncf-operator-sdk@cncf.io>" --verify checksums.txt.asc
+  args:
+    chdir: "{{ download_directory.path }}"
+  register: signature_verify
+  failed_when: signature_verify.rc != 0
+  changed_when: false
+
+- name: Set operatorsdk_dowload 1
+  ansible.builtin.set_fact:
+    operatorsdk_dowload: "{{ operatorsdk_dowload_1.dest }}"
+  when: operatorsdk_dowload_1 is not skipped
+
+- name: Set operatorsdk_dowload 2
+  ansible.builtin.set_fact:
+    operatorsdk_dowload: "{{ operatorsdk_dowload_2.dest }}"
+  when: operatorsdk_dowload_2 is not skipped
+
+- name: Check checksums
+  ansible.builtin.shell:
+    cmd: grep {{ operatorsdk_dowload | basename }} checksums.txt | sha256sum -c -
+    chdir: "{{ download_directory.path }}"
+  register: checksum_check
+  failed_when: checksum_check.rc != 0
+  changed_when: false

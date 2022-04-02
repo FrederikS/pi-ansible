@@ -1,0 +1,5 @@
+---
+- name: Uninstall operatorsdk
+  ansible.builtin.file:
+    path: "{{ local_bin_dir }}/operator-sdk"
+    state: absent

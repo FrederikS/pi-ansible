@@ -1,0 +1,47 @@
+---
+
+- name: Check operatorsdk version
+  ansible.builtin.shell: set -o pipefail && operator-sdk version 2>&1 | head -n 1 | grep -q {{ operatorsdk_version }}
+  args:
+    executable: /bin/bash
+  failed_when: false
+  changed_when: false
+  register: operatorsdk_versions_match
+
+- include_tasks: download.yml
+  when: operatorsdk_versions_match.rc != 0
+
+- name: Install operatorsdk
+  ansible.builtin.copy:
+    src: "{{ operatorsdk_dowload }}"
+    dest: "{{ local_bin_dir }}/operator-sdk"
+    remote_src: true
+    owner: root
+    group: root
+    mode: 0755
+  when: operatorsdk_versions_match.rc != 0
+
+- name: Check OLM status
+  ansible.builtin.shell: |
+    source $HOME/.profile
+    operator-sdk olm status
+  args:
+    executable: /bin/bash
+  register: olm_status
+  changed_when: false
+  failed_when: false
+
+- name: Install OLM on cluster
+  ansible.builtin.shell: |
+    source $HOME/.profile
+    operator-sdk olm install
+  args:
+    executable: /bin/bash
+  changed_when: false
+  when: (operatorsdk_versions_match.rc) != 0 or (olm_status.rc != 0)
+
+- name: Remove temp download directory
+  ansible.builtin.file:
+    path: /tmp/operator-sdk
+    state: absent
+  when: operatorsdk_versions_match.rc != 0
