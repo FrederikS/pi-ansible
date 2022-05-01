@@ -1,0 +1,16 @@
+---
+- name: Install rpi-eeprom
+  ansible.builtin.package:
+    name: rpi-eeprom
+    state: present
+
+# - name: Update firmware
+#   ansible.builtin.command:
+#     cmd: rpi-eeprom-update
+#   register: rpi_update
+#   changed_when: rpi_update.rc != 0
+#   notify: reboot
+
+# - name: debug
+#   ansible.builtin.debug:
+#     var: rpi_update

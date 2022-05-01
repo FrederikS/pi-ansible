@@ -1,24 +1,24 @@
 ---
 - hosts: k3s_cluster
-  become: yes
+  become: true
   roles:
-    - role: k3s
+    - rpi
+    - k3s
+    - fdk
 
 - hosts: master
-  become: yes
+  become: true
   roles:
-    - role: ethernet
-    - role: k3s/master
-    - role: terraform
-    - role: aws
-    - role: helm
-    - role: fdk
+    - ethernet
+    - k3s/master
+    - terraform
+    - aws
+    - helm
 
 - hosts: node
-  become: yes
+  become: true
   roles:
-    - role: ethernet
-    - role: touchscreen
-    - role: sshfix
-    - role: k3s/node
-    - role: fdk
+    - ethernet
+    - k3s/node
+    - touchscreen
+    - sshfix
