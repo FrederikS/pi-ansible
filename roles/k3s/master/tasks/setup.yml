@@ -2,7 +2,7 @@
 
 - name: Copy K3s service file
   register: k3s_service
-  template:
+  ansible.builtin.template:
     src: "k3s.service.j2"
     dest: "{{ systemd_dir }}/k3s.service"
     owner: root
@@ -10,50 +10,50 @@
     mode: 0644
 
 - name: Enable and check K3s service
-  systemd:
+  ansible.builtin.systemd:
     name: k3s
-    daemon_reload: yes
+    daemon_reload: true
     state: restarted
-    enabled: yes
+    enabled: true
 
 - name: Wait for node-token
-  wait_for:
+  ansible.builtin.wait_for:
     path: /var/lib/rancher/k3s/server/node-token
 
 - name: Register node-token file access mode
-  stat:
+  ansible.builtin.stat:
     path: /var/lib/rancher/k3s/server
   register: p
 
 - name: Change file access node-token
-  file:
+  ansible.builtin.file:
     path: /var/lib/rancher/k3s/server
     mode: 0700
 
 - name: Restore node-token file access
-  file:
+  ansible.builtin.file:
     path: /var/lib/rancher/k3s/server
     mode: "{{ p.stat.mode }}"
 
 - name: Create kubectl symlink
-  file:
+  ansible.builtin.file:
     src: /usr/local/bin/k3s
     dest: /usr/local/bin/kubectl
     state: link
 
 - name: Create crictl symlink
-  file:
+  ansible.builtin.file:
     src: /usr/local/bin/k3s
     dest: /usr/local/bin/crictl
     state: link
 
 - name: Check that kubectl autocompletion exists
-  stat:
+  ansible.builtin.stat:
     path: /etc/bash_completion.d/kubectl
   register: kubectl_autocompletion_stat_result
 
 - name: Enable kubectl autocomplete
-  shell: set -o pipefail && kubectl completion bash > /etc/bash_completion.d/kubectl
+  ansible.builtin.shell: set -o pipefail && kubectl completion bash > /etc/bash_completion.d/kubectl
   args:
     executable: /bin/bash
   when: not kubectl_autocompletion_stat_result.stat.exists

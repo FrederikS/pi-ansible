@@ -1,23 +1,22 @@
 ---
 
 - name: Disable services
-  systemd:
+  ansible.builtin.systemd:
     name: "{{ item }}"
     state: stopped
-    enabled: no
+    enabled: false
   failed_when: false
   with_items:
     - k3s
-    - k3s-node
 
 - name: pkill -9 -f "k3s/data/[^/]+/bin/containerd-shim-runc"
   register: pkill_containerd_shim_runc
-  command: pkill -9 -f "k3s/data/[^/]+/bin/containerd-shim-runc"
+  ansible.builtin.command: pkill -9 -f "k3s/data/[^/]+/bin/containerd-shim-runc"
   changed_when: "pkill_containerd_shim_runc.rc == 0"
   failed_when: false
 
 - name: Umount k3s filesystems
-  include_role:
+  ansible.builtin.include_role:
     name: reset
     tasks_from: umount
   vars:
@@ -31,28 +30,27 @@
     loop_var: mounted_fs
 
 - name: Remove service files, binaries and data
-  file:
+  ansible.builtin.file:
     name: "{{ item }}"
     state: absent
   with_items:
     - /usr/local/bin/k3s
     - "{{ systemd_dir }}/k3s.service"
-    - "{{ systemd_dir }}/k3s-node.service"
     - /etc/rancher/k3s
     - /var/lib/kubelet
     - /var/lib/rancher/k3s
 
 - name: daemon_reload
-  systemd:
-    daemon_reload: yes
+  ansible.builtin.systemd:
+    daemon_reload: true
 
 - name: Remove kubectl symlink
-  file:
+  ansible.builtin.file:
     path: /usr/local/bin/kubectl
     state: absent
 
 - name: Remove crictl symlink
-  file:
+  ansible.builtin.file:
     path: /usr/local/bin/crictl
     state: absent
 

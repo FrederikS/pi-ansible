@@ -1,9 +1,9 @@
 ---
 - name: Load secrets
-  include_vars: defaults/secrets.yml
+  ansible.builtin.include_vars: defaults/secrets.yml
 
 - name: Create k3s config directory
-  file:
+  ansible.builtin.file:
     path: "{{ k3s_config_directory }}"
     state: directory
     recurse: false
@@ -12,9 +12,10 @@
     group: root
 
 - name: Create K3s registries.yaml config
-  template:
+  ansible.builtin.template:
     src: "registries.yaml.j2"
     dest: "{{ k3s_config_directory }}/registries.yaml"
     owner: root
     group: root
     mode: 0600
+  notify: restart k3s

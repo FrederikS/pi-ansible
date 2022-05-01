@@ -1,14 +1,6 @@
 ---
-- name: Check k3s version
-  shell: set -o pipefail && k3s --version 2>&1 | head -n 1 | grep -q {{ k3s_version }}
-  args:
-    executable: /bin/bash
-  failed_when: false
-  changed_when: false
-  register: k3s_versions_match
-
 - name: collect facts about system services
-  service_facts:
+  ansible.builtin.service_facts:
 
 - import_tasks: setup.yml
   when:
@@ -17,10 +9,10 @@
     (k3s_versions_match.rc != 0)
 
 - name: Read node-token from master
-  slurp:
+  ansible.builtin.slurp:
     src: /var/lib/rancher/k3s/server/node-token
   register: node_token
 
 - name: Store Master node-token
-  set_fact:
+  ansible.builtin.set_fact:
     token: "{{ node_token.content | b64decode | regex_replace('\n', '') }}"
